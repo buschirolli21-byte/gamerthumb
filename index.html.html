@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack de Prompts + Curso de Edição — Tesla Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#07070f;--dark:#0d0d1a;--card:#131320;--card2:#181826;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --red:#e8362a;--red-bg:rgba(232,54,42,0.08);--red-border:rgba(232,54,42,0.25);
+  --white:#f2f0e8;--muted:rgba(242,240,232,0.5);--dim:rgba(242,240,232,0.2);
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.1);
+  --amber:#eab308;--amber-bg:rgba(234,179,8,0.08);
+  --blue:#4a8fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* ── NOISE ── */
+body::after{content:'';position:fixed;inset:0;opacity:.025;pointer-events:none;z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 40px;
+  transition:all .3s
+}
+.topbar.scrolled{background:rgba(7,7,15,0.94);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.tb-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px}
+.tb-logo span{color:var(--red)}
+.tb-cta{background:var(--red);color:#fff;border:none;padding:9px 22px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;letter-spacing:.5px;border-radius:4px;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition:opacity .2s}
+.tb-cta:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden
+}
+.hero-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(232,54,42,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(232,54,42,.035) 1px,transparent 1px);
+  background-size:55px 55px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 20%,transparent 100%)}
+.hero-glow{position:absolute;width:700px;height:700px;
+  background:radial-gradient(circle,rgba(232,54,42,.10) 0%,transparent 65%);
+  top:50%;left:50%;transform:translate(-50%,-55%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:820px}
+
+.eyebrow{display:inline-flex;align-items:center;gap:8px;
+  background:var(--red-bg);border:1px solid var(--red-border);
+  padding:6px 16px;font-size:11px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--red);
+  margin-bottom:24px;font-family:'Space Mono',monospace;
+  animation:fadeUp .6s ease both}
+.eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--red);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero h1{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,10vw,108px);line-height:.9;letter-spacing:1px;
+  margin-bottom:20px;animation:fadeUp .6s .1s ease both}
+.hero h1 em{color:var(--red);font-style:normal}
+.hero h1 .line2{font-size:clamp(28px,5vw,52px);color:var(--muted);display:block;margin-top:6px}
+
+.hero-desc{font-size:clamp(15px,2vw,18px);color:var(--muted);
+  max-width:520px;margin:0 auto 36px;line-height:1.7;font-weight:300;
+  animation:fadeUp .6s .2s ease both}
+.hero-desc strong{color:var(--white);font-weight:600}
+
+.hero-cta-wrap{animation:fadeUp .6s .3s ease both;display:flex;
+  flex-direction:column;align-items:center;gap:12px}
+.btn-hero{background:var(--red);color:#fff;border:none;
+  padding:18px 48px;font-size:17px;font-weight:700;
+  font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:.5px;
+  clip-path:polygon(14px 0%,100% 0%,calc(100% - 14px) 100%,0% 100%);
+  transition:all .2s;position:relative;overflow:hidden}
+.btn-hero::after{content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,.12);transform:translateX(-100%);transition:transform .3s}
+.btn-hero:hover::after{transform:translateX(0)}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(232,54,42,.35)}
+.hero-note{font-size:12px;color:var(--dim);font-family:'Space Mono',monospace;letter-spacing:.5px}
+
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:56px;
+  animation:fadeUp .6s .4s ease both;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat-num{font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1;
+  color:var(--white)}
+.hstat-num span{color:var(--red)}
+.hstat-label{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;
+  letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PRODUTOS ── */
+.produtos{padding:100px 24px;max-width:1060px;margin:0 auto}
+.sec-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--red);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:14px}
+.sec-title{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(38px,6vw,68px);letter-spacing:1px;line-height:.93;margin-bottom:48px}
+
+.produtos-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.prod-card{background:var(--card);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;position:relative;transition:all .3s}
+.prod-card:hover{border-color:rgba(232,54,42,.3);transform:translateY(-4px)}
+.prod-card.featured{border:2px solid var(--red-border)}
+.prod-badge{position:absolute;top:16px;right:16px;
+  background:var(--red);color:#fff;font-size:10px;font-weight:700;
+  padding:4px 12px;font-family:'Space Mono',monospace;letter-spacing:1px;
+  border-radius:99px}
+.prod-preview{height:180px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;font-size:72px}
+.prod-preview::before{content:'';position:absolute;inset:0}
+.prod-preview.p1::before{background:linear-gradient(135deg,#1a0505 0%,#0d0d1a 100%)}
+.prod-preview.p2::before{background:linear-gradient(135deg,#05051a 0%,#0d0d1a 100%)}
+.prod-preview-accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.prod-preview-accent.blue{background:var(--blue)}
+.prod-emoji{position:relative;z-index:1;filter:drop-shadow(0 0 20px rgba(232,54,42,.4))}
+.prod-body{padding:24px}
+.prod-tag{font-size:10px;font-family:'Space Mono',monospace;color:var(--red);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.prod-tag.blue{color:var(--blue)}
+.prod-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.5px;
+  margin-bottom:10px;line-height:1}
+.prod-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:18px}
+.prod-features{list-style:none;margin-bottom:20px}
+.prod-features li{font-size:13px;color:var(--muted);padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;gap:9px}
+.prod-features li::before{content:'→';color:var(--red);font-size:11px;flex-shrink:0}
+.prod-price{display:flex;align-items:baseline;gap:8px;margin-bottom:16px}
+.prod-price-val{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--white);line-height:1}
+.prod-price-period{font-size:13px;color:var(--dim)}
+.prod-price-old{font-size:14px;color:var(--dim);text-decoration:line-through}
+.btn-prod{width:100%;padding:13px;background:var(--red);color:#fff;border:none;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;border-radius:6px;letter-spacing:.5px;transition:opacity .2s}
+.btn-prod:hover{opacity:.85}
+.btn-prod.outline{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-prod.outline:hover{border-color:var(--border2);color:var(--white);background:rgba(255,255,255,.04)}
+
+/* BUNDLE */
+.bundle-card{
+  background:var(--card);border:2px solid var(--red-border);
+  border-radius:12px;padding:32px;margin-top:20px;
+  position:relative;overflow:hidden
+}
+.bundle-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+.bundle-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.bundle-left h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;margin-bottom:6px}
+.bundle-left p{font-size:14px;color:var(--muted);line-height:1.6}
+.bundle-items{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.bundle-item{background:var(--red-bg);border:1px solid var(--red-border);
+  padding:5px 12px;font-size:12px;color:var(--white);border-radius:4px;font-weight:500}
+.bundle-right{text-align:center;flex-shrink:0}
+.bundle-price{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:var(--white)}
+.bundle-price sub{font-size:20px;font-family:'DM Sans',sans-serif;font-weight:300;color:var(--muted)}
+.bundle-old{font-size:14px;color:var(--dim);text-decoration:line-through;margin-bottom:4px}
+.bundle-save{background:var(--green-bg);color:var(--green);font-size:12px;font-weight:700;
+  padding:4px 12px;border-radius:99px;display:inline-block;margin-bottom:14px;
+  font-family:'Space Mono',monospace;letter-spacing:.5px}
+.btn-bundle{background:var(--red);color:#fff;border:none;
+  padding:14px 36px;font-size:15px;font-weight:700;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+  letter-spacing:.5px;transition:all .2s;display:block;width:100%}
+.btn-bundle:hover{opacity:.85;transform:translateY(-1px)}
+
+/* ── PROMPTS PREVIEW ── */
+.preview-sec{padding:80px 24px;background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.preview-inner{max-width:900px;margin:0 auto}
+.prompts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:32px}
+.prompt-card{background:var(--card2);border:1px solid var(--border);
+  border-radius:8px;padding:16px;position:relative;transition:border-color .2s}
+.prompt-card:hover{border-color:rgba(232,54,42,.3)}
+.prompt-game{font-size:9px;font-family:'Space Mono',monospace;color:var(--red);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.prompt-style{font-size:13px;font-weight:600;color:var(--white);margin-bottom:6px}
+.prompt-text{font-size:11px;color:var(--muted);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.prompt-blur{position:absolute;bottom:0;left:0;right:0;height:40px;
+  background:linear-gradient(transparent,var(--card2));border-radius:0 0 8px 8px}
+.prompt-lock{position:absolute;bottom:8px;right:10px;font-size:12px;color:var(--dim)}
+
+/* ── PARA QUEM É ── */
+.paraquem{padding:80px 24px;max-width:900px;margin:0 auto}
+.paraquem-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.pq-card{background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:22px;display:flex;gap:14px;align-items:flex-start;
+  transition:border-color .2s}
+.pq-card:hover{border-color:rgba(232,54,42,.25)}
+.pq-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.pq-title{font-size:15px;font-weight:600;margin-bottom:5px}
+.pq-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── MODULOS ── */
+.modulos-sec{padding:80px 24px;background:var(--dark);border-top:1px solid var(--border)}
+.modulos-inner{max-width:860px;margin:0 auto}
+.modulos-list{margin-top:32px}
+.modulo-item{display:flex;gap:20px;padding:20px 0;
+  border-bottom:1px solid var(--border);align-items:flex-start}
+.modulo-item:last-child{border-bottom:none}
+.mod-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--red);
+  line-height:1;flex-shrink:0;width:52px}
+.mod-content{flex:1}
+.mod-title{font-size:16px;font-weight:600;margin-bottom:5px}
+.mod-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.mod-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mod-tag{font-size:10px;background:rgba(255,255,255,.05);color:var(--dim);
+  padding:3px 9px;border-radius:99px;font-family:'Space Mono',monospace}
+
+/* ── DEPOIMENTOS ── */
+.depo-sec{padding:80px 24px;max-width:900px;margin:0 auto}
+.depo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:32px}
+.depo-card{background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:22px;transition:border-color .2s}
+.depo-card:hover{border-color:rgba(232,54,42,.25)}
+.depo-stars{color:var(--amber);font-size:13px;margin-bottom:10px;letter-spacing:2px}
+.depo-text{font-size:14px;color:var(--muted);line-height:1.7;
+  font-style:italic;margin-bottom:14px}
+.depo-author{display:flex;align-items:center;gap:10px}
+.depo-avatar{width:36px;height:36px;border-radius:50%;
+  background:var(--red-bg);border:1px solid var(--red-border);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;color:var(--red);flex-shrink:0}
+.depo-name{font-size:13px;font-weight:600}
+.depo-handle{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace}
+
+/* ── GARANTIA ── */
+.garantia{padding:60px 24px;background:var(--dark);border-top:1px solid var(--border)}
+.garantia-inner{max-width:640px;margin:0 auto;text-align:center}
+.garantia-icon{font-size:56px;margin-bottom:16px}
+.garantia h2{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:1px;margin-bottom:12px}
+.garantia p{font-size:15px;color:var(--muted);line-height:1.7}
+
+/* ── FAQ ── */
+.faq{padding:80px 24px;max-width:700px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+.faq-q{padding:18px 0;font-size:15px;font-weight:500;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q:hover{color:var(--red)}
+.faq-icon{font-size:18px;color:var(--red);flex-shrink:0;transition:transform .25s}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.faq-a.open{max-height:200px}
+.faq-a-inner{padding:0 0 18px;font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ── CTA FINAL ── */
+.cta-final{padding:100px 24px;text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(232,54,42,.09) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.cta-final h2{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,8vw,88px);letter-spacing:1px;line-height:.93;
+  margin-bottom:18px;position:relative;z-index:1}
+.cta-final h2 em{color:var(--red);font-style:normal}
+.cta-final p{font-size:16px;color:var(--muted);max-width:440px;
+  margin:0 auto 36px;line-height:1.7;position:relative;z-index:1}
+.cta-final .btn-hero{position:relative;z-index:1}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:28px 40px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px}
+.ft-logo span{color:var(--red)}
+.ft-copy{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace}
+.ft-links{display:flex;gap:18px}
+.ft-links a{font-size:12px;color:var(--dim);text-decoration:none;transition:color .15s}
+.ft-links a:hover{color:var(--muted)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── MOBILE ── */
+@media(max-width:720px){
+  .topbar{padding:14px 20px}
+  .produtos-grid{grid-template-columns:1fr}
+  .paraquem-grid{grid-template-columns:1fr}
+  .hero-stats{gap:24px}
+  .hstat-num{font-size:34px}
+  .bundle-inner{flex-direction:column;text-align:center}
+  footer{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar" id="topbar">
+  <div class="tb-logo">Tesla<span>Flow</span></div>
+  <button class="tb-cta" onclick="document.getElementById('comprar').scrollIntoView({behavior:'smooth'})">Quero agora →</button>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="eyebrow">🎮 produtos digitais exclusivos</div>
+    <h1>
+      THUMBNAILS QUE<br>
+      <em>VENDEM CLIQUES</em>
+      <span class="line2">+ edição que prende o espectador</span>
+    </h1>
+    <p class="hero-desc">
+      Os dois produtos que o <strong>Tesla Flow</strong> usa para criar conteúdo de games que cresce de verdade — agora disponíveis para você aplicar no seu canal.
+    </p>
+    <div class="hero-cta-wrap">
+      <button class="btn-hero" onclick="document.getElementById('comprar').scrollIntoView({behavior:'smooth'})">
+        Quero os dois produtos →
+      </button>
+      <span class="hero-note">entrega imediata • acesso vitalício • sem assinatura</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num">50<span>+</span></div>
+        <div class="hstat-label">prompts prontos</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">10<span>x</span></div>
+        <div class="hstat-label">mais rápido</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">6</div>
+        <div class="hstat-label">módulos de edição</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">R$<span>37</span></div>
+        <div class="hstat-label">bundle completo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PRODUTOS ════════════════ -->
+<section class="produtos reveal" id="comprar">
+  <div class="sec-label">// o que você leva</div>
+  <h2 class="sec-title">ESCOLHA SEU<br><span style="color:var(--red)">PACK</span></h2>
+
+  <div class="produtos-grid">
+    <!-- Produto 1 -->
+    <div class="prod-card">
+      <div class="prod-preview p1">
+        <div class="prod-preview-accent"></div>
+        <span class="prod-emoji">🎨</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-tag">Pack de Prompts</div>
+        <h3 class="prod-title">50 PROMPTS DE THUMBNAIL PARA GAMES</h3>
+        <p class="prod-desc">50 prompts de IA prontos e organizados por jogo. Cole no ChatGPT, Midjourney ou qualquer IA e gere thumbnails virais em segundos.</p>
+        <ul class="prod-features">
+          <li>50 prompts organizados por 10 jogos</li>
+          <li>3 a 5 estilos diferentes por jogo</li>
+          <li>Dica de uso em cada prompt</li>
+          <li>RE, DMC, DBZ, GTA, Elden Ring e mais</li>
+          <li>Funciona com qualquer IA de imagem</li>
+          <li>Acesso vitalício + atualizações grátis</li>
+        </ul>
+        <div class="prod-price">
+          <div class="prod-price-val">R$ 17</div>
+          <div class="prod-price-period">pagamento único</div>
+        </div>
+        <button class="btn-prod" onclick="window.open('https://kiwify.com.br/SEU-LINK-AQUI','_blank')">Comprar por R$ 17 →</button>
+      </div>
+    </div>
+
+    <!-- Produto 2 -->
+    <div class="prod-card featured">
+      <div class="prod-badge">MAIS COMPLETO</div>
+      <div class="prod-preview p2">
+        <div class="prod-preview-accent blue"></div>
+        <span class="prod-emoji">🎬</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-tag blue">Guia de Edição</div>
+        <h3 class="prod-title">COMO EDITO MEUS VÍDEOS — DO ZERO AO PRO</h3>
+        <p class="prod-desc">O processo completo de edição do Tesla Flow em 6 módulos detalhados. Tudo que você precisa para criar vídeos de games que engajam.</p>
+        <ul class="prod-features">
+          <li>6 módulos completos de edição</li>
+          <li>40+ dicas práticas e diretas</li>
+          <li>Configuração do CapCut e DaVinci</li>
+          <li>Efeitos e estilo gamer profissional</li>
+          <li>Exportação certa para cada plataforma</li>
+          <li>Estratégia de crescimento incluída</li>
+        </ul>
+        <div class="prod-price">
+          <div class="prod-price-val">R$ 27</div>
+          <div class="prod-price-period">pagamento único</div>
+        </div>
+        <button class="btn-prod" onclick="window.open('https://kiwify.com.br/SEU-LINK-AQUI','_blank')">Comprar por R$ 27 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUNDLE -->
+  <div class="bundle-card reveal">
+    <div class="bundle-inner">
+      <div class="bundle-left">
+        <div class="prod-tag" style="margin-bottom:8px">🔥 Melhor escolha</div>
+        <h3>BUNDLE COMPLETO</h3>
+        <p>Os dois produtos juntos com desconto especial. Tudo que você precisa para ter thumbnails profissionais <em>e</em> edição de qualidade no seu canal.</p>
+        <div class="bundle-items">
+          <span class="bundle-item">✓ 50 Prompts de Thumbnail</span>
+          <span class="bundle-item">✓ Guia Completo de Edição</span>
+          <span class="bundle-item">✓ Acesso Vitalício</span>
+          <span class="bundle-item">✓ Atualizações Grátis</span>
+        </div>
+      </div>
+      <div class="bundle-right">
+        <div class="bundle-old">De R$ 44</div>
+        <div class="bundle-save">ECONOMIZE R$ 7</div>
+        <div class="bundle-price">R$ 37<sub>/único</sub></div>
+        <button class="btn-bundle" onclick="window.open('https://kiwify.com.br/SEU-LINK-BUNDLE','_blank')">
+          Quero o Bundle por R$ 37 →
+        </button>
+        <p style="font-size:11px;color:var(--dim);margin-top:10px;font-family:'Space Mono',monospace">
+          Pix • Cartão • Parcelado
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PREVIEW PROMPTS ════════════════ -->
+<section class="preview-sec reveal">
+  <div class="preview-inner">
+    <div class="sec-label">// prévia do pack</div>
+    <h2 class="sec-title" style="font-size:clamp(32px,5vw,52px)">ALGUNS PROMPTS<br>QUE VOCÊ LEVA</h2>
+    <div class="prompts-grid">
+      <div class="prompt-card">
+        <div class="prompt-game">Resident Evil</div>
+        <div class="prompt-style">Suspense + Revelação</div>
+        <div class="prompt-text">Dark atmosphere, Leon Kennedy facing zombie horde, red blood splatter text 'AS 6 SAVE ROOMS MAIS SEGURAS', dramatic lighting, high contrast, cinematic...</div>
+        <div class="prompt-blur"></div>
+        <div class="prompt-lock">🔒</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-game">Devil May Cry</div>
+        <div class="prompt-style">S Rank Achievement</div>
+        <div class="prompt-text">DMC5 Dante with SSS rank overlay, blue neon lightning effects, bold text 'COMO TIRAR S RANK EM TUDO', dark background with energy particles, epic pose...</div>
+        <div class="prompt-blur"></div>
+        <div class="prompt-lock">🔒</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-game">Dragon Ball Z</div>
+        <div class="prompt-style">Power Level Ranking</div>
+        <div class="prompt-text">Multiple characters in SSJ transformations, energy auras glowing, bold orange text 'TOP 10 MAIS FORTES DO BT3', epic battle background...</div>
+        <div class="prompt-blur"></div>
+        <div class="prompt-lock">🔒</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-game">GTA V</div>
+        <div class="prompt-style">Dinheiro Rápido</div>
+        <div class="prompt-text">Stacks of cash bills background, Trevor counting money, green dollar signs, bold text 'R$1 MILHÃO EM 30 MINUTOS', wealth aesthetic, Los Santos skyline...</div>
+        <div class="prompt-blur"></div>
+        <div class="prompt-lock">🔒</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-game">Elden Ring</div>
+        <div class="prompt-style">Build Overpowered</div>
+        <div class="prompt-text">Tarnished character in golden armor, impossible damage numbers floating, text 'BUILD QUE MATA QUALQUER BOSS', epic golden light, mythical atmosphere...</div>
+        <div class="prompt-blur"></div>
+        <div class="prompt-lock">🔒</div>
+      </div>
+      <div class="prompt-card" style="display:flex;align-items:center;justify-content:center;min-height:120px">
+        <div style="text-align:center">
+          <div style="font-size:28px;margin-bottom:8px">🔒</div>
+          <div style="font-size:13px;color:var(--muted)">+45 prompts no pack completo</div>
+          <div style="font-size:11px;color:var(--dim);margin-top:4px;font-family:'Space Mono',monospace">Free Fire • Valorant • Minecraft • God of War • FIFA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PARA QUEM É ════════════════ -->
+<section class="paraquem reveal">
+  <div class="sec-label">// para quem é</div>
+  <h2 class="sec-title" style="font-size:clamp(32px,5vw,56px)">ESSE PACK É<br>PARA <span style="color:var(--red)">VOCÊ</span> SE...</h2>
+  <div class="paraquem-grid">
+    <div class="pq-card">
+      <div class="pq-icon">😤</div>
+      <div>
+        <div class="pq-title">Você perde horas fazendo thumbnail</div>
+        <div class="pq-desc">E no final não fica do jeito que você quer. Com os prompts prontos, você gera em minutos e ainda tem tempo pra editar o video.</div>
+      </div>
+    </div>
+    <div class="pq-card">
+      <div class="pq-icon">📉</div>
+      <div>
+        <div class="pq-title">Seu CTR está abaixo de 5%</div>
+        <div class="pq-desc">Thumbnail fraca mata qualquer video bom. Os prompts foram testados para gerar imagens com alto potencial de clique.</div>
+      </div>
+    </div>
+    <div class="pq-card">
+      <div class="pq-icon">🎮</div>
+      <div>
+        <div class="pq-title">Você cria conteúdo de games</div>
+        <div class="pq-desc">Todos os prompts são feitos especificamente para o nicho gamer. Nada de prompts genéricos que não funcionam para o seu público.</div>
+      </div>
+    </div>
+    <div class="pq-card">
+      <div class="pq-icon">✂️</div>
+      <div>
+        <div class="pq-title">Você quer melhorar sua edição</div>
+        <div class="pq-desc">O guia de edição ensina do zero o processo real do Tesla Flow — sem enrolação, só o que realmente faz diferença no resultado final.</div>
+      </div>
+    </div>
+    <div class="pq-card">
+      <div class="pq-icon">🚀</div>
+      <div>
+        <div class="pq-title">Seu canal está começando</div>
+        <div class="pq-desc">Não precisa de equipamento caro nem anos de experiência. O guia foi pensado para quem está construindo a base do canal agora.</div>
+      </div>
+    </div>
+    <div class="pq-card">
+      <div class="pq-icon">⏰</div>
+      <div>
+        <div class="pq-title">Você não tem tempo a perder</div>
+        <div class="pq-desc">Prompts prontos + processo de edição documentado = você passa menos tempo produzindo e mais tempo crescendo seu canal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ MÓDULOS DO CURSO ════════════════ -->
+<section class="modulos-sec reveal">
+  <div class="modulos-inner">
+    <div class="sec-label">// o que está no guia de edição</div>
+    <h2 class="sec-title" style="font-size:clamp(32px,5vw,56px)">6 MÓDULOS<br><span style="color:var(--red)">COMPLETOS</span></h2>
+    <div class="modulos-list">
+      <div class="modulo-item">
+        <div class="mod-num">01</div>
+        <div class="mod-content">
+          <div class="mod-title">Configurando o Ambiente</div>
+          <div class="mod-desc">Qual software usar, como configurar para não travar o PC durante a gravação e como organizar seus arquivos para editar mais rápido.</div>
+          <div class="mod-tags"><span class="mod-tag">CapCut</span><span class="mod-tag">DaVinci</span><span class="mod-tag">Configuração</span></div>
+        </div>
+      </div>
+      <div class="modulo-item">
+        <div class="mod-num">02</div>
+        <div class="mod-content">
+          <div class="mod-title">Capturando o Gameplay</div>
+          <div class="mod-desc">Como gravar a tela com qualidade profissional usando OBS, Xbox Game Bar ou ShadowPlay — sem perder frames e sem travar o jogo.</div>
+          <div class="mod-tags"><span class="mod-tag">OBS Studio</span><span class="mod-tag">Qualidade</span><span class="mod-tag">Gravação</span></div>
+        </div>
+      </div>
+      <div class="modulo-item">
+        <div class="mod-num">03</div>
+        <div class="mod-content">
+          <div class="mod-title">Montagem e Ritmo</div>
+          <div class="mod-desc">A regra dos 3 segundos, como estruturar o vídeo para prender o espectador, e quando usar jump cuts para deixar o conteúdo dinâmico.</div>
+          <div class="mod-tags"><span class="mod-tag">Corte</span><span class="mod-tag">Ritmo</span><span class="mod-tag">Engajamento</span></div>
+        </div>
+      </div>
+      <div class="modulo-item">
+        <div class="mod-num">04</div>
+        <div class="mod-content">
+          <div class="mod-title">Efeitos e Estilo Gamer</div>
+          <div class="mod-desc">Transições, efeitos de texto, correção de cor por jogo e efeitos sonoros que dão personalidade ao canal sem exagerar.</div>
+          <div class="mod-tags"><span class="mod-tag">Efeitos</span><span class="mod-tag">Cor</span><span class="mod-tag">Som</span></div>
+        </div>
+      </div>
+      <div class="modulo-item">
+        <div class="mod-num">05</div>
+        <div class="mod-content">
+          <div class="mod-title">Áudio e Música</div>
+          <div class="mod-desc">Como gravar voz de qualidade, tratar o áudio no CapCut e onde encontrar músicas sem copyright para monetizar sem problemas.</div>
+          <div class="mod-tags"><span class="mod-tag">Microfone</span><span class="mod-tag">Mixagem</span><span class="mod-tag">Copyright</span></div>
+        </div>
+      </div>
+      <div class="modulo-item">
+        <div class="mod-num">06</div>
+        <div class="mod-content">
+          <div class="mod-title">Exportar e Publicar</div>
+          <div class="mod-desc">Configurações exatas de exportação para YouTube, TikTok e Reels + estratégia de publicação para o algoritmo trabalhar a seu favor.</div>
+          <div class="mod-tags"><span class="mod-tag">YouTube</span><span class="mod-tag">TikTok</span><span class="mod-tag">Algoritmo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ DEPOIMENTOS ════════════════ -->
+<section class="depo-sec reveal">
+  <div class="sec-label">// resultados reais</div>
+  <h2 class="sec-title" style="font-size:clamp(32px,5vw,52px)">QUEM USOU<br><span style="color:var(--red)">APROVOU</span></h2>
+  <div class="depo-grid">
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"Meu CTR saiu de 2,8% pra 9,4% depois de usar os prompts de Resident Evil. A thumbnail ficou muito mais chamativa e as views explodiram."</p>
+      <div class="depo-author">
+        <div class="depo-avatar">MR</div>
+        <div>
+          <div class="depo-name">Matheus R.</div>
+          <div class="depo-handle">@mthgames_br · YouTube</div>
+        </div>
+      </div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"O módulo de montagem e ritmo mudou completamente como eu edito. Aprendi a regra dos 3 segundos e minha retenção foi de 35% pra 62%."</p>
+      <div class="depo-author">
+        <div class="depo-avatar">LF</div>
+        <div>
+          <div class="depo-name">Lucas F.</div>
+          <div class="depo-handle">@lucasgamer · TikTok</div>
+        </div>
+      </div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"Eu ficava horas tentando fazer thumbnail no Canva. Com os prompts de IA, faço em 10 minutos e fica muito mais profissional do que antes."</p>
+      <div class="depo-author">
+        <div class="depo-avatar">AC</div>
+        <div>
+          <div class="depo-name">Ana C.</div>
+          <div class="depo-handle">@anacgaming · YouTube</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ GARANTIA ════════════════ -->
+<section class="garantia reveal">
+  <div class="garantia-inner">
+    <div class="garantia-icon">🛡️</div>
+    <h2>GARANTIA DE 7 DIAS</h2>
+    <p>Se por qualquer motivo você não ficar satisfeito com os produtos, basta enviar um e-mail em até 7 dias após a compra e devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</p>
+  </div>
+</section>
+
+<!-- ════════════════ FAQ ════════════════ -->
+<section class="faq reveal">
+  <div class="sec-label">// dúvidas frequentes</div>
+  <h2 class="sec-title" style="font-size:clamp(32px,5vw,52px);margin-bottom:24px">PERGUNTAS<br><span style="color:var(--red)">FREQUENTES</span></h2>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Como recebo os produtos após a compra?<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">Imediatamente após a confirmação do pagamento, você recebe um e-mail com o link para download dos PDFs. O acesso é vitalício — você pode baixar quando quiser.</div></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Os prompts funcionam com qual IA?<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">Funcionam com qualquer IA de geração de imagem: ChatGPT (DALL-E), Midjourney, Stable Diffusion, Adobe Firefly, Canva AI e outros. Cada prompt inclui dicas de adaptação.</div></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Precisa ter experiência em edição para o guia?<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">Não! O guia foi feito para todos os níveis. Começa do zero com a instalação do software e vai até técnicas avançadas. Se você sabe ligar o computador, consegue seguir.</div></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Qual forma de pagamento é aceita?<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">Pix (aprovação imediata), cartão de crédito em até 12x e boleto bancário. Tudo processado com segurança pela Kiwify.</div></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Os produtos são atualizados?<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">Sim! Quem compra recebe todas as atualizações futuras gratuitamente. Novos prompts e novos módulos serão adicionados sem custo adicional.</div></div>
+  </div>
+</section>
+
+<!-- ════════════════ CTA FINAL ════════════════ -->
+<section class="cta-final">
+  <div class="cta-glow"></div>
+  <h2>CHEGA DE<br>THUMBNAIL<br><em>FRACA</em></h2>
+  <p>Você tem o conteúdo. Agora você tem as ferramentas. É hora de o seu canal crescer de verdade.</p>
+  <button class="btn-hero" onclick="document.getElementById('comprar').scrollIntoView({behavior:'smooth'})">
+    Quero os produtos agora →
+  </button>
+  <p style="font-size:12px;color:var(--dim);margin-top:16px;font-family:'Space Mono',monospace">
+    Garantia de 7 dias • Entrega imediata • Acesso vitalício
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-logo">Tesla<span>Flow</span></div>
+  <div class="ft-links">
+    <a href="#">Termos de uso</a>
+    <a href="#">Política de privacidade</a>
+    <a href="mailto:contato@teslaflow.com">Contato</a>
+  </div>
+  <div class="ft-copy">© 2026 Tesla Flow · @tesla_flow</div>
+</footer>
+
+<script>
+// Topbar scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('topbar').classList.toggle('scrolled',window.scrollY>50)
+})
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+},{threshold:.1})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+
+// FAQ
+function toggleFaq(el){
+  const answer=el.nextElementSibling
+  const icon=el.querySelector('.faq-icon')
+  const isOpen=answer.classList.contains('open')
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('open'))
+  document.querySelectorAll('.faq-icon').forEach(i=>i.textContent='+')
+  if(!isOpen){answer.classList.add('open');icon.textContent='−'}
+}
+</script>
+</body>
+</html>
